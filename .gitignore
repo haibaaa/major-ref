@@ -1,0 +1,19 @@
+# environment / caches
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# raw / private data (do not commit patient records)
+data/*.csv
+
+# key material, ciphertexts, serialized crypto objects
+keys/
+*.key
+*.ct
+*.bin
+**/secret*
+
+# generated artifacts and large results
+artifacts/
+results/*.npz
