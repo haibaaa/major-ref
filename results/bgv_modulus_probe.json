@@ -1,0 +1,110 @@
+{
+  "depth": 3,
+  "security": "HEStd_128_classic",
+  "rows": [
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 30,
+      "t": 537133057,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 31,
+      "t": 1073872897,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 32,
+      "t": 2148728833,
+      "error": "ld/openfhe-development/src/pke/lib/schemerns/rns-cryptoparameters.cpp:l.161:PrecomputeCRTTables(): EstimateLogP() failure: expected sizeP [2], but got sizeP [3]"
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 33,
+      "t": 4295294977,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 34,
+      "t": 8590458881,
+      "error": "generation.cpp:l.242:computeModuli(): Reduce the number of additions or key switches per level or the digit size. We do not support moduli greater than 60 bits."
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 36,
+      "t": 34362163201,
+      "error": "generation.cpp:l.242:computeModuli(): Reduce the number of additions or key switches per level or the digit size. We do not support moduli greater than 60 bits."
+    },
+    {
+      "setting": "FLEXIBLEAUTO (default)",
+      "t_bits": 40,
+      "t": 549757714433,
+      "error": "generation.cpp:l.242:computeModuli(): Reduce the number of additions or key switches per level or the digit size. We do not support moduli greater than 60 bits."
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 30,
+      "t": 537133057,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 31,
+      "t": 1073872897,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 32,
+      "t": 2148728833,
+      "ring_dim": 16384,
+      "correct_runs": 3,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 33,
+      "t": 4295294977,
+      "ring_dim": 16384,
+      "correct_runs": 0,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 34,
+      "t": 8590458881,
+      "ring_dim": 16384,
+      "correct_runs": 0,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 36,
+      "t": 34362163201,
+      "ring_dim": 16384,
+      "correct_runs": 0,
+      "repeats": 3
+    },
+    {
+      "setting": "FIXEDMANUAL, 60-bit moduli",
+      "t_bits": 40,
+      "t": 549757714433,
+      "ring_dim": 16384,
+      "correct_runs": 0,
+      "repeats": 3
+    }
+  ]
+}
