@@ -1,0 +1,289 @@
+[
+  {
+    "run": "ckks_deg1",
+    "scheme": "ckks",
+    "degree": 1,
+    "client_private_locked_during_server_step": true,
+    "steps": {
+      "server_init": {
+        "protocol": "protocol.json",
+        "scheme": "ckks",
+        "degree": 1,
+        "process_wall_s": 0.13637301699782256
+      },
+      "client_setup": {
+        "context_and_keygen_s": 0.1291663940064609,
+        "ring_dim": 16384,
+        "process_wall_s": 0.5029453390015988
+      },
+      "client_encrypt": {
+        "records": 60,
+        "encrypt_median_ms": 8.836778491968289,
+        "process_wall_s": 0.9548943109984975
+      },
+      "server_evaluate": {
+        "requests": 60,
+        "eval_keys_loaded": [
+          "rotation_keys.bin"
+        ],
+        "load_context_keys_model_s": 0.0675433790020179,
+        "evaluate_median_ms": 41.074265995121095,
+        "process_wall_s": 3.4213975189923076
+      },
+      "client_decrypt": {
+        "responses": 60,
+        "positive_decisions": 21,
+        "process_wall_s": 2.7066768369986676
+      }
+    },
+    "sizes": {
+      "setup_bundle_bytes": {
+        "crypto_context.bin": 677,
+        "rotation_keys.bin": 18881283
+      },
+      "setup_bundle_total_bytes": 18881960,
+      "request_bytes_per_record": 1049985.0,
+      "response_bytes_per_record": 1313444.0,
+      "client_private_bytes": {
+        "crypto_context.bin": 677,
+        "decrypted.json": 6535,
+        "public_key.bin": 1049637,
+        "secret_key.bin": 525189
+      }
+    },
+    "audit": {
+      "server_visible_files": 183,
+      "secret_key_file_names_visible": [],
+      "secret_key_byte_windows_checked": 6,
+      "secret_key_byte_windows_found": [],
+      "public_key_byte_windows_found_in_to_server": [],
+      "preprocessed_feature_patterns_checked": 180,
+      "preprocessed_feature_patterns_found_in_requests": 0,
+      "raw_value_hit_rate_own_request": 0.07520891364902507,
+      "raw_value_hit_rate_other_record_request_control": 0.07520891364902507,
+      "note": "Byte audit only rules out accidental plaintext/secret-key inclusion; confidentiality itself rests on the RLWE hardness assumption."
+    },
+    "results": {
+      "records": 60,
+      "decision_agreement_with_plain": 1.0,
+      "z_abs_err_max": 4.756195437494171e-13,
+      "p_abs_err_vs_plain_poly_max": 1.961208973000339e-13
+    }
+  },
+  {
+    "run": "bgv_deg1",
+    "scheme": "bgv",
+    "degree": 1,
+    "client_private_locked_during_server_step": true,
+    "steps": {
+      "server_init": {
+        "protocol": "protocol.json",
+        "scheme": "bgv",
+        "degree": 1,
+        "process_wall_s": 0.15059187199221924
+      },
+      "client_setup": {
+        "context_and_keygen_s": 0.13872354000341147,
+        "ring_dim": 16384,
+        "process_wall_s": 0.5083010509988526
+      },
+      "client_encrypt": {
+        "records": 60,
+        "encrypt_median_ms": 9.79945799917914,
+        "process_wall_s": 1.0596304339997005
+      },
+      "server_evaluate": {
+        "requests": 60,
+        "eval_keys_loaded": [
+          "rotation_keys.bin"
+        ],
+        "load_context_keys_model_s": 0.08074465399840847,
+        "evaluate_median_ms": 48.00831099419156,
+        "process_wall_s": 3.9488127999939024
+      },
+      "client_decrypt": {
+        "responses": 60,
+        "positive_decisions": 21,
+        "process_wall_s": 1.6922486340044998
+      }
+    },
+    "sizes": {
+      "setup_bundle_bytes": {
+        "crypto_context.bin": 675,
+        "rotation_keys.bin": 18881281
+      },
+      "setup_bundle_total_bytes": 18881956,
+      "request_bytes_per_record": 1049983.0,
+      "response_bytes_per_record": 1313440.0,
+      "client_private_bytes": {
+        "crypto_context.bin": 675,
+        "decrypted.json": 10041,
+        "public_key.bin": 1049635,
+        "secret_key.bin": 525187
+      }
+    },
+    "audit": {
+      "server_visible_files": 183,
+      "secret_key_file_names_visible": [],
+      "secret_key_byte_windows_checked": 6,
+      "secret_key_byte_windows_found": [],
+      "public_key_byte_windows_found_in_to_server": [],
+      "preprocessed_feature_patterns_checked": 180,
+      "preprocessed_feature_patterns_found_in_requests": 0,
+      "raw_value_hit_rate_own_request": 0.1309192200557103,
+      "raw_value_hit_rate_other_record_request_control": 0.13649025069637882,
+      "note": "Byte audit only rules out accidental plaintext/secret-key inclusion; confidentiality itself rests on the RLWE hardness assumption."
+    },
+    "results": {
+      "records": 60,
+      "decision_agreement_with_plain": 1.0,
+      "z_abs_err_max": 0.003682794448934601,
+      "p_abs_err_vs_plain_poly_max": 0.0022767076049386437,
+      "decrypted_equals_exact_integer": true
+    }
+  },
+  {
+    "run": "ckks_deg3",
+    "scheme": "ckks",
+    "degree": 3,
+    "client_private_locked_during_server_step": true,
+    "steps": {
+      "server_init": {
+        "protocol": "protocol.json",
+        "scheme": "ckks",
+        "degree": 3,
+        "process_wall_s": 0.14374379299988504
+      },
+      "client_setup": {
+        "context_and_keygen_s": 0.25331320500117727,
+        "ring_dim": 16384,
+        "process_wall_s": 0.6305152860004455
+      },
+      "client_encrypt": {
+        "records": 60,
+        "encrypt_median_ms": 12.18576250539627,
+        "process_wall_s": 1.2256916839978658
+      },
+      "server_evaluate": {
+        "requests": 60,
+        "eval_keys_loaded": [
+          "rotation_keys.bin",
+          "relin_key.bin"
+        ],
+        "load_context_keys_model_s": 0.1403977480076719,
+        "evaluate_median_ms": 123.8198175051366,
+        "process_wall_s": 8.67346588599321
+      },
+      "client_decrypt": {
+        "responses": 60,
+        "positive_decisions": 21,
+        "process_wall_s": 3.3300411730015185
+      }
+    },
+    "sizes": {
+      "setup_bundle_bytes": {
+        "crypto_context.bin": 789,
+        "relin_key.bin": 6294679,
+        "rotation_keys.bin": 37760867
+      },
+      "setup_bundle_total_bytes": 44056335,
+      "request_bytes_per_record": 1574629.0,
+      "response_bytes_per_record": 1838232.0,
+      "client_private_bytes": {
+        "crypto_context.bin": 789,
+        "decrypted.json": 6544,
+        "public_key.bin": 1574169,
+        "secret_key.bin": 787511
+      }
+    },
+    "audit": {
+      "server_visible_files": 184,
+      "secret_key_file_names_visible": [],
+      "secret_key_byte_windows_checked": 6,
+      "secret_key_byte_windows_found": [],
+      "public_key_byte_windows_found_in_to_server": [],
+      "preprocessed_feature_patterns_checked": 180,
+      "preprocessed_feature_patterns_found_in_requests": 0,
+      "raw_value_hit_rate_own_request": 0.06128133704735376,
+      "raw_value_hit_rate_other_record_request_control": 0.06685236768802229,
+      "note": "Byte audit only rules out accidental plaintext/secret-key inclusion; confidentiality itself rests on the RLWE hardness assumption."
+    },
+    "results": {
+      "records": 60,
+      "decision_agreement_with_plain": 1.0,
+      "z_abs_err_max": 7.404077351225169e-13,
+      "p_abs_err_vs_plain_poly_max": 1.9939605522267811e-13
+    }
+  },
+  {
+    "run": "bgv_linear",
+    "scheme": "bgv",
+    "degree": null,
+    "client_private_locked_during_server_step": true,
+    "steps": {
+      "server_init": {
+        "protocol": "protocol.json",
+        "scheme": "bgv",
+        "degree": null,
+        "process_wall_s": 0.1299425470060669
+      },
+      "client_setup": {
+        "context_and_keygen_s": 0.10998343599203508,
+        "ring_dim": 16384,
+        "process_wall_s": 0.45080891299585346
+      },
+      "client_encrypt": {
+        "records": 60,
+        "encrypt_median_ms": 8.030416000110563,
+        "process_wall_s": 0.8984794509888161
+      },
+      "server_evaluate": {
+        "requests": 60,
+        "eval_keys_loaded": [
+          "rotation_keys.bin"
+        ],
+        "load_context_keys_model_s": 0.06907299200247508,
+        "evaluate_median_ms": 21.697022995795123,
+        "process_wall_s": 2.2127548970020143
+      },
+      "client_decrypt": {
+        "responses": 60,
+        "positive_decisions": 21,
+        "process_wall_s": 1.0287168499926338
+      }
+    },
+    "sizes": {
+      "setup_bundle_bytes": {
+        "crypto_context.bin": 619,
+        "rotation_keys.bin": 15734649
+      },
+      "setup_bundle_total_bytes": 15735268,
+      "request_bytes_per_record": 787661.0,
+      "response_bytes_per_record": 525523.0,
+      "client_private_bytes": {
+        "crypto_context.bin": 619,
+        "decrypted.json": 7320,
+        "public_key.bin": 787369,
+        "secret_key.bin": 394026
+      }
+    },
+    "audit": {
+      "server_visible_files": 123,
+      "secret_key_file_names_visible": [],
+      "secret_key_byte_windows_checked": 6,
+      "secret_key_byte_windows_found": [],
+      "public_key_byte_windows_found_in_to_server": [],
+      "preprocessed_feature_patterns_checked": 180,
+      "preprocessed_feature_patterns_found_in_requests": 0,
+      "raw_value_hit_rate_own_request": 0.12534818941504178,
+      "raw_value_hit_rate_other_record_request_control": 0.13370473537604458,
+      "note": "Byte audit only rules out accidental plaintext/secret-key inclusion; confidentiality itself rests on the RLWE hardness assumption."
+    },
+    "results": {
+      "records": 60,
+      "decision_agreement_with_plain": 1.0,
+      "z_abs_err_max": 0.003682794448934601,
+      "decrypted_equals_exact_integer": true
+    }
+  }
+]

@@ -17,3 +17,6 @@ keys/
 # generated artifacts and large results
 artifacts/
 results/*.npz
+
+# client/server demo exchange files (contain secret keys)
+demo/
