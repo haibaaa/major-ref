@@ -1,0 +1,716 @@
+{
+  "environment": {
+    "python": "3.12.12",
+    "uv": "uv 0.10.2",
+    "openfhe": "1.6.1.0.24.4",
+    "numpy": "2.5.5",
+    "scikit-learn": "1.9.1",
+    "os": "Arch Linux",
+    "kernel": "7.2.8-arch1-2",
+    "glibc": "glibc-2.44",
+    "machine": "x86_64",
+    "cpu": "Intel(R) Core(TM) i7-7600U CPU @ 2.80GHz",
+    "logical_cpus": 4
+  },
+  "omp_num_threads": 1,
+  "slot_sum": "rotations",
+  "repetitions": 5,
+  "warmup_records_per_rep": 3,
+  "timer": "time.perf_counter, per record, single process",
+  "summary_statistic": "median over repetitions x records (keygen/context: over repetitions)",
+  "configs": [
+    {
+      "name": "ckks_linear",
+      "scheme": "ckks",
+      "degree": null,
+      "outputs": "z",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 1,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "scale_bits": 50,
+        "first_mod_bits": 60
+      },
+      "sizes_bytes": {
+        "crypto_context": 629,
+        "public_key": 787379,
+        "secret_key_client_only": 394036,
+        "relin_key": 0,
+        "rotation_keys": 10490147,
+        "input_ciphertext": 787423,
+        "output_ciphertexts": [
+          525453
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 25.123329003690742,
+          "mean_ms": 25.37525419902522,
+          "std_ms": 0.5089983092915995,
+          "p95_ms": 26.156292998348363,
+          "min_ms": 25.042174995178357,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 53.39923201245256,
+          "mean_ms": 54.12329780228902,
+          "std_ms": 1.7090149390441849,
+          "p95_ms": 56.731697599752806,
+          "min_ms": 52.942056994652376,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 6.239258997084107,
+          "mean_ms": 6.235496846832878,
+          "std_ms": 0.08666099327152983,
+          "p95_ms": 6.371479005611036,
+          "min_ms": 6.063955996069126,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 23.16138600872364,
+          "mean_ms": 23.183911183441523,
+          "std_ms": 0.18417698493758264,
+          "p95_ms": 23.4836346906377,
+          "min_ms": 22.706286996253766,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 9.685206503490917,
+          "mean_ms": 9.787913883143725,
+          "std_ms": 0.34736651568623145,
+          "p95_ms": 10.32670970307663,
+          "min_ms": 9.308366003097035,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 39.112537997425534,
+          "mean_ms": 39.20732191341813,
+          "std_ms": 0.4423691690274688,
+          "p95_ms": 39.952163647831185,
+          "min_ms": 38.430144006269984,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 25.593871786868696
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 181.69140625,
+        "peak_rss_mb_all_reps": 181.69140625,
+        "rss_before_crypto_mb": 158.4296875,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "z_abs_err_vs_plain": {
+          "mean": 1.2549796560753132e-13,
+          "max": 4.849454171562684e-13
+        },
+        "edge_z_abs_err": 1.5987211554602254e-14,
+        "decision_agreement_with_plain": 1.0
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "name": "bgv_linear",
+      "scheme": "bgv",
+      "degree": null,
+      "outputs": "z",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 1,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "plaintext_modulus": 1073872897,
+        "t_bits": 31,
+        "sx": 256,
+        "sw": 1024,
+        "sc": 512,
+        "max_abs_zq_over_half_t": 0.005700372942460408,
+        "max_abs_pq_bound_over_half_t": null
+      },
+      "sizes_bytes": {
+        "crypto_context": 619,
+        "public_key": 787369,
+        "secret_key_client_only": 394026,
+        "relin_key": 0,
+        "rotation_keys": 10490137,
+        "input_ciphertext": 787413,
+        "output_ciphertexts": [
+          525443
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 27.683896987582557,
+          "mean_ms": 27.881727195926942,
+          "std_ms": 0.7031702353228788,
+          "p95_ms": 28.947276002145372,
+          "min_ms": 27.370661991881207,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 57.47508800413925,
+          "mean_ms": 58.43217060319148,
+          "std_ms": 1.8905285835871888,
+          "p95_ms": 61.292448997846805,
+          "min_ms": 57.41116301214788,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 6.697151504340582,
+          "mean_ms": 6.685387113733062,
+          "std_ms": 0.08586799847353105,
+          "p95_ms": 6.806694201077335,
+          "min_ms": 6.432639987906441,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 25.168611995468382,
+          "mean_ms": 25.21551434978998,
+          "std_ms": 0.36855179035945435,
+          "p95_ms": 25.586954149912344,
+          "min_ms": 24.7234499984188,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 1.496972494351212,
+          "mean_ms": 1.5022738735812406,
+          "std_ms": 0.05132977645287162,
+          "p95_ms": 1.5996465444914065,
+          "min_ms": 1.4050589961698279,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 33.35110150510445,
+          "mean_ms": 33.40317533710428,
+          "std_ms": 0.3891141920827021,
+          "p95_ms": 33.80240200058324,
+          "min_ms": 32.74574800161645,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 29.974808586258824
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 183.3359375,
+        "peak_rss_mb_all_reps": 183.3359375,
+        "rss_before_crypto_mb": 158.50390625,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "decrypted_equals_exact_integer": true,
+        "edge_decrypted_equals_exact_integer": true,
+        "z_quant_err_vs_plain": {
+          "mean": 0.001184606600658233,
+          "max": 0.003682794448934601
+        },
+        "decision_agreement_with_plain": 1.0
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ckks_deg1",
+      "scheme": "ckks",
+      "degree": 1,
+      "outputs": "z, p(z)",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 2,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "scale_bits": 50,
+        "first_mod_bits": 60
+      },
+      "sizes_bytes": {
+        "crypto_context": 677,
+        "public_key": 1049637,
+        "secret_key_client_only": 525189,
+        "relin_key": 0,
+        "rotation_keys": 12587931,
+        "input_ciphertext": 1049681,
+        "output_ciphertexts": [
+          787743,
+          525501
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 32.04362900578417,
+          "mean_ms": 32.34241180180106,
+          "std_ms": 0.7749061114794913,
+          "p95_ms": 33.517633203882724,
+          "min_ms": 31.73119500570465,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 67.64255699818023,
+          "mean_ms": 68.60766259778757,
+          "std_ms": 2.1677985051803446,
+          "p95_ms": 71.9194509962108,
+          "min_ms": 66.78375299088657,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 7.884227503382135,
+          "mean_ms": 7.919036979728844,
+          "std_ms": 0.11930901494864846,
+          "p95_ms": 8.114332506374922,
+          "min_ms": 7.668001999263652,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 42.71545050141867,
+          "mean_ms": 42.77219272019769,
+          "std_ms": 0.4799089166982403,
+          "p95_ms": 43.36989531220752,
+          "min_ms": 41.99093399802223,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 22.86597499914933,
+          "mean_ms": 22.928228079981636,
+          "std_ms": 0.24762809291757662,
+          "p95_ms": 23.379217345063807,
+          "min_ms": 22.50903499952983,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 73.53766650339821,
+          "mean_ms": 73.61945777990816,
+          "std_ms": 0.5570454035109378,
+          "p95_ms": 74.4961038006295,
+          "min_ms": 72.71706599567551,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 13.589611081178376
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 188.75390625,
+        "peak_rss_mb_all_reps": 188.93359375,
+        "rss_before_crypto_mb": 158.375,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "z_abs_err_vs_plain": {
+          "mean": 1.333864615982172e-13,
+          "max": 5.431211036466266e-13
+        },
+        "p_abs_err_vs_plain_poly": {
+          "mean": 7.020102092229289e-14,
+          "max": 3.461675390781238e-13
+        },
+        "edge_p_abs_err_vs_plain_poly": 7.283063041541027e-14,
+        "edge_z_abs_err": 3.2507330161024584e-13,
+        "decision_agreement_with_plain": 1.0,
+        "p_abs_err_vs_sigmoid": {
+          "mean": 0.06883823506642057,
+          "max": 0.09916264655126855
+        }
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "name": "bgv_deg1",
+      "scheme": "bgv",
+      "degree": 1,
+      "outputs": "z, p(z)",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 2,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "plaintext_modulus": 1073872897,
+        "t_bits": 31,
+        "sx": 256,
+        "sw": 1024,
+        "sc": 512,
+        "max_abs_zq_over_half_t": 0.005700372942460408,
+        "max_abs_pq_bound_over_half_t": 0.5525127137578859
+      },
+      "sizes_bytes": {
+        "crypto_context": 675,
+        "public_key": 1049635,
+        "secret_key_client_only": 525187,
+        "relin_key": 0,
+        "rotation_keys": 12587929,
+        "input_ciphertext": 1049679,
+        "output_ciphertexts": [
+          787741,
+          525499
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 32.65134699176997,
+          "mean_ms": 32.9815242002951,
+          "std_ms": 0.7332226729817461,
+          "p95_ms": 34.08720841107424,
+          "min_ms": 32.54174499306828,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 65.98712199775036,
+          "mean_ms": 67.24549999635201,
+          "std_ms": 2.3921830488239078,
+          "p95_ms": 70.89822899433784,
+          "min_ms": 65.8861190022435,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 8.048079995205626,
+          "mean_ms": 8.038828250476703,
+          "std_ms": 0.13882404835191423,
+          "p95_ms": 8.20468890160555,
+          "min_ms": 7.7248960005817935,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 47.10087349667447,
+          "mean_ms": 47.24108454635522,
+          "std_ms": 1.2095256412098414,
+          "p95_ms": 47.90061405219603,
+          "min_ms": 46.4954870112706,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 3.482314001303166,
+          "mean_ms": 3.5001141136550964,
+          "std_ms": 0.1577423620134216,
+          "p95_ms": 3.6261138979170937,
+          "min_ms": 3.355021995957941,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 58.62065900146263,
+          "mean_ms": 58.78002691048702,
+          "std_ms": 1.2393342435232564,
+          "p95_ms": 59.57214515510714,
+          "min_ms": 57.906799993361346,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 17.058730546110727
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 190.33984375,
+        "peak_rss_mb_all_reps": 190.33984375,
+        "rss_before_crypto_mb": 158.44921875,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "decrypted_equals_exact_integer": true,
+        "edge_decrypted_equals_exact_integer": true,
+        "z_quant_err_vs_plain": {
+          "mean": 0.001184606600658233,
+          "max": 0.003682794448934601
+        },
+        "p_quant_err_vs_plain_poly": {
+          "mean": 0.0008233795599992775,
+          "max": 0.0022767076049386437
+        },
+        "decision_agreement_with_plain": 1.0,
+        "p_abs_err_vs_sigmoid": {
+          "mean": 0.06801608253426199,
+          "max": 0.09790425213297677
+        }
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ckks_deg3",
+      "scheme": "ckks",
+      "degree": 3,
+      "outputs": "z, p(z)",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 4,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "scale_bits": 50,
+        "first_mod_bits": 60
+      },
+      "sizes_bytes": {
+        "crypto_context": 789,
+        "public_key": 1574169,
+        "secret_key_client_only": 787511,
+        "relin_key": 6294679,
+        "rotation_keys": 25174395,
+        "input_ciphertext": 1574213,
+        "output_ciphertexts": [
+          1312339,
+          525613
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 40.74079399288166,
+          "mean_ms": 41.5273589984281,
+          "std_ms": 1.499428540838119,
+          "p95_ms": 43.77589239447843,
+          "min_ms": 40.15392799919937,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 145.1038859959226,
+          "mean_ms": 149.48026099882554,
+          "std_ms": 8.386440507328397,
+          "p95_ms": 162.27558880054858,
+          "min_ms": 142.06208000541665,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 10.03450449934462,
+          "mean_ms": 10.162223472919626,
+          "std_ms": 0.27840841219116075,
+          "p95_ms": 10.74853864920442,
+          "min_ms": 9.521004991256632,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 104.84126200026367,
+          "mean_ms": 106.04834976324734,
+          "std_ms": 2.7406729960674783,
+          "p95_ms": 111.5364624070935,
+          "min_ms": 99.33816999546252,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 26.959585993608925,
+          "mean_ms": 27.355022093106527,
+          "std_ms": 0.8611326522821501,
+          "p95_ms": 29.130167106632143,
+          "min_ms": 26.35986200766638,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 141.90351349679986,
+          "mean_ms": 143.5655953292735,
+          "std_ms": 3.7547831049763234,
+          "p95_ms": 151.09960335321375,
+          "min_ms": 136.95337099488825,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 7.046296580247221
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 214.98046875,
+        "peak_rss_mb_all_reps": 214.98046875,
+        "rss_before_crypto_mb": 158.54296875,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "z_abs_err_vs_plain": {
+          "mean": 1.38591158225602e-13,
+          "max": 6.585842982076429e-13
+        },
+        "p_abs_err_vs_plain_poly": {
+          "mean": 7.063809028447684e-14,
+          "max": 2.529643161608419e-13
+        },
+        "edge_p_abs_err_vs_plain_poly": 2.072120253160392e-12,
+        "edge_z_abs_err": 2.220446049250313e-13,
+        "decision_agreement_with_plain": 1.0,
+        "p_abs_err_vs_sigmoid": {
+          "mean": 0.01878305792417035,
+          "max": 0.026147811391668108
+        }
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    },
+    {
+      "name": "ckks_deg5",
+      "scheme": "ckks",
+      "degree": 5,
+      "outputs": "z, p(z)",
+      "params": {
+        "ring_dim": 16384,
+        "mult_depth": 4,
+        "batch": 16,
+        "security": "HEStd_128_classic",
+        "slot_sum": "rotations",
+        "scale_bits": 50,
+        "first_mod_bits": 60
+      },
+      "sizes_bytes": {
+        "crypto_context": 789,
+        "public_key": 1574169,
+        "secret_key_client_only": 787511,
+        "relin_key": 6294679,
+        "rotation_keys": 25174395,
+        "input_ciphertext": 1574213,
+        "output_ciphertexts": [
+          1312339,
+          525493
+        ]
+      },
+      "timing": {
+        "context": {
+          "median_ms": 40.229313002782874,
+          "mean_ms": 41.47421279922128,
+          "std_ms": 1.7448756476370908,
+          "p95_ms": 44.10321519826539,
+          "min_ms": 40.11474299477413,
+          "n": 5
+        },
+        "keygen": {
+          "median_ms": 144.52424099727068,
+          "mean_ms": 149.93669319956098,
+          "std_ms": 8.837241788429287,
+          "p95_ms": 163.50829879229423,
+          "min_ms": 142.96135400945786,
+          "n": 5
+        },
+        "encrypt": {
+          "median_ms": 10.158867000427563,
+          "mean_ms": 10.324889210023684,
+          "std_ms": 0.34606393201031793,
+          "p95_ms": 10.900468900217675,
+          "min_ms": 9.871292000752874,
+          "n": 300
+        },
+        "evaluate": {
+          "median_ms": 127.03845799842384,
+          "mean_ms": 129.51712228314136,
+          "std_ms": 3.9011878300374683,
+          "p95_ms": 135.82517214817926,
+          "min_ms": 120.28658199415077,
+          "n": 300
+        },
+        "decrypt": {
+          "median_ms": 27.347488998202607,
+          "mean_ms": 27.849444356931297,
+          "std_ms": 0.9897573746278422,
+          "p95_ms": 29.665807198762195,
+          "min_ms": 26.042369005153887,
+          "n": 300
+        },
+        "latency_per_record": {
+          "median_ms": 164.4428979998338,
+          "mean_ms": 167.69145585009633,
+          "std_ms": 5.134631700580092,
+          "p95_ms": 175.90698445637827,
+          "min_ms": 156.36109000479337,
+          "n": 300
+        },
+        "throughput_records_per_s_sequential": 6.087193205038129
+      },
+      "memory": {
+        "peak_rss_mb_first_rep": 216.77734375,
+        "peak_rss_mb_all_reps": 216.77734375,
+        "rss_before_crypto_mb": 158.4453125,
+        "note": "ru_maxrss high-water mark of the worker process; first_rep = one context, its keys, 60 records"
+      },
+      "correctness": {
+        "z_abs_err_vs_plain": {
+          "mean": 1.3409229745094583e-13,
+          "max": 5.273559366969494e-13
+        },
+        "p_abs_err_vs_plain_poly": {
+          "mean": 8.563934977834364e-13,
+          "max": 1.7505420724095444e-11
+        },
+        "edge_p_abs_err_vs_plain_poly": 4.502567207964603e-09,
+        "edge_z_abs_err": 8.348877145181177e-14,
+        "decision_agreement_with_plain": 1.0,
+        "p_abs_err_vs_sigmoid": {
+          "mean": 0.004448078606213115,
+          "max": 0.006885438230285423
+        }
+      },
+      "test_metrics_from_decrypted": {
+        "accuracy": 0.6666666666666666,
+        "roc_auc": 0.7406931964056482,
+        "f1": 0.5,
+        "recall": 0.5263157894736842,
+        "confusion_matrix": [
+          [
+            30,
+            11
+          ],
+          [
+            9,
+            10
+          ]
+        ]
+      }
+    }
+  ]
+}
