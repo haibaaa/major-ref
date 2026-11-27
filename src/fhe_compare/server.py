@@ -12,7 +12,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import BATCH, bgv, ckks
+from . import BATCH, bfv, bgv, ckks
 from .model import ROOT
 from .protocol import Layout, Protocol, dump, load_ciphertext, load_context, load_eval_keys
 
@@ -37,9 +37,12 @@ def init(layout: Layout, scheme: str, degree: int | None, sum_method: str = "eva
                   clip=pre["clip"][1])
     if scheme == "ckks":
         proto = Protocol(depth=ckks.DEPTH[degree], **common)
-    elif scheme == "bgv":
-        q = _quantizer(meta)
-        proto = Protocol(depth=bgv.DEPTH[degree], t=q.t, sx=q.sx, s=q.s, sc=q.sc, **common)
+    elif scheme in ("bgv", "bfv"):
+        lib = bfv if scheme == "bfv" else bgv
+        q = lib.Quantizer.build(np.array(meta["model"]["weights"]), meta["model"]["bias"],
+                                pre["clip"][1],
+                                meta["polynomial"]["degrees"]["1"]["coefficients_ascending"])
+        proto = Protocol(depth=lib.DEPTH[degree], t=q.t, sx=q.sx, s=q.s, sc=q.sc, **common)
     else:
         raise ValueError(scheme)
     proto.save(layout.protocol)
@@ -58,10 +61,12 @@ def evaluate(layout: Layout) -> dict:
         coeffs = meta["polynomial"]["degrees"][str(proto.degree)]["coefficients_ascending"] if proto.degree else None
         run = lambda ct: ckks.evaluate(cc, ct, *pts, coeffs, proto.sum_method)
     else:
-        q = _quantizer(meta)
+        lib = bfv if proto.scheme == "bfv" else bgv
+        q = lib.Quantizer.build(np.array(meta["model"]["weights"]), meta["model"]["bias"],
+                                proto.clip, meta["polynomial"]["degrees"]["1"]["coefficients_ascending"])
         assert (q.t, q.sx, q.s, q.sc) == (proto.t, proto.sx, proto.s, proto.sc), "protocol/model mismatch"
-        pts = bgv.encode_model(cc, q)
-        run = lambda ct: bgv.evaluate(cc, ct, pts, proto.degree, proto.sum_method)
+        pts = lib.encode_model(cc, q)
+        run = lambda ct: lib.evaluate(cc, ct, pts, proto.degree, proto.sum_method)
     t_load = time.perf_counter() - t0
 
     layout.from_server.mkdir(parents=True, exist_ok=True)

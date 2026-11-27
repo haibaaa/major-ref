@@ -99,10 +99,12 @@ almost nothing; better accuracy needs larger Sc, i.e. even more bits.
 
 ### E-2 Plaintext-modulus limit (`scripts/bgv_modulus_probe.py`)
 
-See `openfhe_notes.md` §3 item 10. Practical single-modulus budget: ~31 bits
-(FLEXIBLEAUTO; it fails loudly above its limit). Consequence: degree 3 (≥ 36
-bits, ~48+ at useful accuracy) and degree 5 (≥ 53 bits) do not fit; linear
-(22.5 bits) and degree 1 (~28 bits) do.
+See `openfhe_notes.md` §3 item 10. The 31-bit modulus is the baseline
+configuration. A 33-bit batching prime succeeded in three recorded runs; the
+tested 32-bit prime failed, as did tested values at 34 bits and above. This
+does not establish a universal maximum. Degree 3 (≥ 36 bits, ~48+ at useful
+accuracy) and degree 5 (≥ 53 bits) remain outside measured single-modulus
+configurations; linear and degree 1 are supported.
 
 ### E-3 BGV inference (`scripts/bgv_linear.py`)
 
@@ -204,3 +206,101 @@ rate (CKKS 0.070 vs 0.061; BGV 0.120 vs 0.114), so the hits are
 data-independent. The audit now reports preprocessed-value hits (0/180) and
 raw round-value own-vs-control rates. The audit only rules out accidental
 inclusion; it is not a confidentiality proof.
+
+## H — Added schemes
+
+### H-1 BFV
+
+Command: `uv run python scripts/benchmark.py --threads 1 --reps 3 --only bfv_linear bfv_deg1 --output results/benchmark_threads1_bfv_evalsum.json`.
+Both circuits used t = 1073872897, Sx = 2^8, Sw = 2^10, and the same quantized
+model as BGV. OpenFHE selected N = 8192 at `HEStd_128_classic` (the CKKS/BGV
+baseline uses N = 16384). On 60 test records and two synthetic edge records,
+both outputs matched exact integer arithmetic and all test decisions matched
+plaintext.
+
+| circuit | median latency / record | encrypt | evaluate | decrypt | input ct | max z error |
+|---|---:|---:|---:|---:|---:|---:|
+| BFV linear | 9.59 ms | 3.94 ms | 4.88 ms | 0.72 ms | 257 KiB | 3.7e-3 |
+| BFV degree 1 | 16.74 ms | 5.02 ms | 9.72 ms | 1.76 ms | 385 KiB | 3.7e-3 |
+
+The separate-process client/server exchange also completed for both circuits;
+each returned 21 positive decisions and agreed with the plaintext score on all
+60 test records. These are three-repetition, single-machine measurements, not
+a general performance claim.
+
+### H-2 Paillier at two key sizes
+
+Command: `uv run python scripts/benchmark_paillier.py --reps 1 --key-bits 512`.
+The linear score decrypted with maximum error 4.4e-16 and decision agreement
+60/60. This confirms the additive-encryption path works, but the 512-bit key is
+insecure and is only a functional smoke check.
+
+Command: `uv run python scripts/benchmark_paillier.py --reps 3 --key-bits 3072 --records 5`.
+Five test records evenly spaced across the fixed test set were evaluated per
+repetition. Maximum score error was 2.2e-16 and decision agreement was 5/5.
+Median key generation was 2.94 s; encryption was 3.24 s per record, server
+evaluation 94.7 ms, and decryption 83.5 ms. The request size estimate was about
+20.4 KB per record. This uses a conventional approximate 128-bit modulus size,
+but is not a formal security equivalence to OpenFHE's parameter standard.
+Linear extrapolation puts encryption for all 60 records near 3.2 minutes;
+that full run was not measured. Decimal ciphertext sizes are estimates, not a
+binary wire-format measurement.
+
+## I — Margin-aware precision and decision stability
+
+Command: `uv run python scripts/margin_stress.py`.
+The script constructs clipped feature vectors with 19 target logits from
+−0.01 to +0.01, including exact zero, along the model weight direction. At
+each target it tests the aligned vector and two 1.5-unit perturbations
+orthogonal to the weight vector. Exact zero is a tie and is excluded from flip
+counts, giving 54 labeled inputs per CKKS/BGV/BFV configuration. Paillier uses
+the 18 aligned nonzero-margin vectors to limit runtime. It evaluates CKKS,
+BGV, BFV and Paillier; BGV and BFV each use three baseline scales and a
+matched higher-precision setting.
+The JSON records target/observed logits, timing, flips, integer exactness, and
+training/test agreement. The vectors cover three directions through the
+decision boundary; they are synthetic stress cases, not patient samples.
+
+### Margin-based scale rule
+
+For nearest-integer quantization with input scale `Sx`, weight scale `Sw`, n
+features and `|x_i| ≤ C`, each rounding error is at most 0.5 in integer space.
+The real-score error is therefore bounded by:
+
+```text
+B = sum(|w_i|)/(2*Sx) + n*C/(2*Sw) + n/(4*Sx*Sw) + 1/(2*Sx*Sw)
+```
+
+The terms bound feature rounding, weight rounding, their product, and bias
+rounding. The modulus must also hold the full clipped-domain score without
+wraparound. If a plaintext score has margin `|z| > B`, the quantized score
+keeps its sign. Scales are chosen from the minimum training-score margin, then
+checked against the held-out test set and controlled synthetic margins.
+
+The smallest training margin is 0.001051. For both BGV and BFV, `Sx=2^12`,
+`Sw=2^15`, and the 33-bit batching prime `t=4295294977` give a bound of
+0.001022, just below that margin; the clipped-domain linear bound uses 73.0%
+of `t/2`. This parameter set was selected from the training margin, then checked
+on held-out data: the bound covers observed train/test errors (maximum
+0.000205), and all train and test decisions agree with plaintext. Neither
+scheme flips any of the 54 synthetic labeled inputs at this setting. OpenFHE
+selected N=16384 for BGV and N=8192 for BFV; median stress-path latency was
+19.54 ms and 7.18 ms respectively.
+
+| scheme / settings | score bound | training agreement | test agreement | flips / 54 synthetic inputs |
+|---|---:|---:|---:|---:|
+| CKKS, 50-bit scale | — | — | — | 0 / 54 |
+| BGV, Sx=2^8, Sw=2^10, t=31 bits | 0.02711 | 1.000 | 1.000 | 2 |
+| BFV, Sx=2^8, Sw=2^10, t=31 bits | 0.02711 | 1.000 | 1.000 | 2 |
+| BGV, Sx=2^12, Sw=2^15, t=33 bits | **0.001022** | **1.000** | **1.000** | **0** |
+| BFV, Sx=2^12, Sw=2^15, t=33 bits | **0.001022** | **1.000** | **1.000** | **0** |
+| Paillier, 3072-bit modulus, aligned path | — | — | — | 0 / 18 |
+
+Across tested BGV/BFV settings, observed flips were not monotonic in scale:
+the 2^10/2^10 setting flipped 7 of 54 inputs while 2^8/2^10 flipped 2, even
+though its largest observed error was lower. The selected 33-bit configuration
+had no flips for either exact scheme. Report both an error bound and observed
+decisions; higher scale alone did not guarantee reliability in these finite
+stress cases.
+Full per-setting values are in `results/margin_stress.json`. The 3072-bit
+Paillier run is slow (about 3.3 s per record in this one-run experiment).

@@ -1,7 +1,7 @@
 # Threat model and limitations of the client/server demonstration
 
 This describes what `scripts/demo_client_server.py` (and the `fhe_compare.client` /
-`fhe_compare.server` modules) do and do not protect. It is a technical
+`fhe_compare.server` modules) do and do not protect for CKKS, BGV and BFV. It is a technical
 demonstration on a public dataset, not a clinical or production system.
 
 ## Parties and what each holds

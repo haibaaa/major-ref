@@ -11,7 +11,7 @@ import time
 
 import numpy as np
 
-from . import bgv, ckks
+from . import bfv, bgv, ckks
 from .protocol import (Layout, Protocol, dump, dump_eval_keys, load_ciphertext, load_context,
                        load_public_key, load_secret_key)
 
@@ -27,13 +27,16 @@ def preprocess(raw: dict[str, float], proto: Protocol) -> np.ndarray:
 
 
 def _lib(proto: Protocol):
-    return ckks if proto.scheme == "ckks" else bgv
+    return {"ckks": ckks, "bgv": bgv, "bfv": bfv}[proto.scheme]
 
 
 def setup(layout: Layout) -> dict:
     proto = Protocol.load(layout.protocol)
     t0 = time.perf_counter()
-    cc = ckks.make_context(proto.depth) if proto.scheme == "ckks" else bgv.make_context(proto.t, proto.depth)
+    if proto.scheme == "ckks":
+        cc = ckks.make_context(proto.depth)
+    else:
+        cc = _lib(proto).make_context(proto.t, proto.depth)
     keys = _lib(proto).keygen(cc, proto.degree, proto.sum_method)
     t_keygen = time.perf_counter() - t0
 
@@ -71,7 +74,7 @@ def encrypt(layout: Layout, records: list[dict[str, float]]) -> dict:
         if proto.scheme == "ckks":
             ct = ckks.encrypt(cc, pk, x)
         else:
-            ct = bgv.encrypt(cc, pk, [round(v * proto.sx) for v in x])
+            ct = _lib(proto).encrypt(cc, pk, [round(v * proto.sx) for v in x])
         t.append(time.perf_counter() - a)
         (layout.requests / f"{i:04d}.ct").write_bytes(dump(ct))
     return {"records": len(records), "encrypt_median_ms": 1e3 * float(np.median(t))}
@@ -87,13 +90,13 @@ def decrypt(layout: Layout) -> list[dict]:
         names = ["z"] + (["p"] if proto.degree else [])
         cts = [load_ciphertext((layout.from_server / f"{req.stem}_{n}.ct").read_bytes()) for n in names]
         vals = lib.decrypt(cc, sk, cts)
-        if proto.scheme == "bgv":
+        if proto.scheme in ("bgv", "bfv"):
             raw_ints = list(vals)
             vals = [vals[0] / proto.s] + ([vals[1] / (proto.sc * proto.s)] if proto.degree else [])
         r = {"request": req.stem, "z": float(vals[0]), "decision": int(vals[0] > 0)}
         if proto.degree:
             r["p"] = float(vals[1])
-        if proto.scheme == "bgv":
+        if proto.scheme in ("bgv", "bfv"):
             r["raw_residues"] = raw_ints
         results.append(r)
     (layout.client_private / "decrypted.json").write_text(json.dumps(results, indent=2) + "\n")

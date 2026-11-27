@@ -1,4 +1,4 @@
-"""Phase F: controlled CKKS vs BGV benchmark.
+"""Controlled CKKS, BGV and BFV benchmark.
 
 Each configuration runs in its own subprocess (fresh OpenFHE global key
 state, per-config peak RSS) with a fixed OMP_NUM_THREADS. Per repetition:
@@ -26,6 +26,8 @@ CONFIGS = {
     "bgv_linear": ("bgv", None),
     "ckks_deg1": ("ckks", 1),
     "bgv_deg1": ("bgv", 1),
+    "bfv_linear": ("bfv", None),
+    "bfv_deg1": ("bfv", 1),
     "ckks_deg3": ("ckks", 3),
     "ckks_deg5": ("ckks", 5),
 }
@@ -45,7 +47,7 @@ def worker(name: str, reps: int, sum_method: str) -> dict:
     import openfhe as fhe
     from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, recall_score, roc_auc_score
 
-    from fhe_compare import bgv, ckks
+    from fhe_compare import bfv, bgv, ckks
     from fhe_compare.model import load_model, sigmoid
     from fhe_compare.sizes import eval_key_sizes, nbytes
 
@@ -62,12 +64,13 @@ def worker(name: str, reps: int, sum_method: str) -> dict:
         model_pts = lambda cc: ckks.encode_model(cc, m.w, m.b)
         run_eval = lambda cc, ct, pts: ckks.evaluate(cc, ct, *pts, coeffs, sum_method)
     else:
-        lib, depth = bgv, bgv.DEPTH[degree]
-        q = bgv.Quantizer.build(m.w, m.b, m.clip, m.poly[1])
+        lib = bfv if scheme == "bfv" else bgv
+        depth = lib.DEPTH[degree]
+        q = lib.Quantizer.build(m.w, m.b, m.clip, m.poly[1])
         prep = q.quantize_x
-        new_cc = lambda: bgv.make_context(q.t, depth)
-        model_pts = lambda cc: bgv.encode_model(cc, q)
-        run_eval = lambda cc, ct, pts: bgv.evaluate(cc, ct, pts, degree, sum_method)
+        new_cc = lambda: lib.make_context(q.t, depth)
+        model_pts = lambda cc: lib.encode_model(cc, q)
+        run_eval = lambda cc, ct, pts: lib.evaluate(cc, ct, pts, degree, sum_method)
 
     inputs = [prep(x) for x in m.X_test]
     edge_inputs = [prep(x) for x in m.edge_records()]
@@ -177,6 +180,8 @@ def main() -> None:
     ap.add_argument("--reps", type=int, default=5)
     ap.add_argument("--only", nargs="*", choices=list(CONFIGS))
     ap.add_argument("--sum", default="evalsum", choices=["evalsum", "rotations"])
+    ap.add_argument("--output", type=Path,
+                    help="JSON output path (defaults to results/benchmark_threads<N>_<sum>.json)")
     ap.add_argument("--worker")
     args = ap.parse_args()
 
@@ -204,7 +209,10 @@ def main() -> None:
               f"peak {r['memory']['peak_rss_mb_first_rep']:.0f}/{r['memory']['peak_rss_mb_all_reps']:.0f} MB | ct {r['sizes_bytes']['input_ciphertext'] / 1024:.0f} KiB "
               f"| agree {c['decision_agreement_with_plain']:.3f} | {'OK' if ok else 'CHECK'} "
               f"({time.perf_counter() - t0:.0f}s)")
-    out = ROOT / "results" / f"benchmark_threads{args.threads}_{args.sum}.json"
+    out = args.output or (ROOT / "results" / f"benchmark_threads{args.threads}_{args.sum}.json")
+    if not out.is_absolute():
+        out = ROOT / out
+    out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps({
         "environment": env_info, "omp_num_threads": args.threads, "slot_sum": args.sum, "repetitions": args.reps,
         "warmup_records_per_rep": WARMUP, "timer": "time.perf_counter, per record, single process",

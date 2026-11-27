@@ -1,0 +1,41 @@
+{
+  "scheme": "Paillier",
+  "scope": "linear score only; model weights plaintext at evaluator",
+  "key_bits": 512,
+  "security_note": "Functional smoke only: this key size is not secure or comparable to HEStd_128_classic.",
+  "repetitions": 1,
+  "records_per_repetition": 60,
+  "timing": {
+    "keygen": {
+      "median_ms": 19.895416000508703,
+      "mean_ms": 19.895416000508703,
+      "p95_ms": 19.895416000508703
+    },
+    "encrypt_record": {
+      "median_ms": 21.964900499369833,
+      "mean_ms": 21.963478416607057,
+      "p95_ms": 22.691805951217248
+    },
+    "evaluate_record": {
+      "median_ms": 4.320692502005841,
+      "mean_ms": 4.4043205669368035,
+      "p95_ms": 4.752677949545614
+    },
+    "decrypt_score": {
+      "median_ms": 0.7007525000517489,
+      "mean_ms": 0.7450692503577253,
+      "p95_ms": 1.043372252388508
+    }
+  },
+  "correctness": {
+    "max_abs_score_error": 4.440892098500626e-16,
+    "mean_abs_score_error": 9.351605138411637e-17,
+    "decision_agreement": 1.0
+  },
+  "approx_decimal_wire_bytes": {
+    "public_key": 154,
+    "request_per_record": 3475.0,
+    "response_per_record": 316.0,
+    "note": "decimal ciphertext representation plus 8-byte exponent estimate; not a binary wire protocol"
+  }
+}

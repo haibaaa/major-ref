@@ -1,9 +1,11 @@
-"""CKKS vs BGV encrypted logistic-regression inference (OpenFHE).
+"""Encrypted logistic-regression inference: CKKS, BGV, BFV and Paillier.
 
 Modules:
     model   load and validate the plaintext artifacts shared by both schemes
     ckks    CKKS context, keys, encryption, circuit evaluation, decryption
     bgv     BGV quantization, context, keys, encryption, circuit, decryption
+    bfv     BFV quantization, context, keys, encryption, circuit, decryption
+    paillier additive-encryption linear-score baseline (python-paillier)
     sizes   serialized-size measurement for contexts, keys and ciphertexts
 
 Functions are labelled CLIENT (holds the secret key) or SERVER (sees only

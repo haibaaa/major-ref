@@ -47,9 +47,11 @@ layout for a single-patient inference; batching several patients per
 ciphertext is unexplored. Agent.
 
 **D-09 BGV: linear + degree 1 only in the main comparison; degrees 3/5
-reported as a limitation; CRT optional.** Measured: single plaintext modulus
-~31 bits; degree 3 needs ≥ 36 (≈ 48+ at useful accuracy), degree 5 ≥ 53. CRT
-across 2–3 moduli would work but multiplies cost and complexity for the viva.
+reported as a limitation; CRT optional.** The baseline uses a 31-bit plaintext
+modulus; a 33-bit batching prime passed the recorded three-run probe, while
+the tested 32-bit prime and values at 34 bits or above failed. Degree 3 needs
+≥ 36 (≈ 48+ at useful accuracy), degree 5 ≥ 53. CRT across 2–3 moduli would
+work but multiplies cost and complexity for the viva.
 *Alternatives:* (A) implement CRT now; (C) tighter clipping (rejected — changes
 preprocessing/model). User approved the agent's recommendation (B, CRT
 optional).

@@ -17,7 +17,7 @@ import openfhe as fhe
 @dataclass(frozen=True)
 class Protocol:
     """Parameters both parties agree on. Contains no patient data and no keys."""
-    scheme: str                  # "ckks" | "bgv"
+    scheme: str                  # "ckks" | "bgv" | "bfv"
     degree: int | None           # sigmoid polynomial degree, None = linear score only
     depth: int
     batch: int

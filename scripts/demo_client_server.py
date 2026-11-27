@@ -99,7 +99,7 @@ def audit(run: Path) -> dict:
 
 def check_results(run: Path, scheme: str, degree: int | None) -> dict:
     sys.path.insert(0, str(ROOT / "src"))
-    from fhe_compare import bgv
+    from fhe_compare import bfv, bgv
     from fhe_compare.model import load_model
 
     m = load_model()
@@ -111,8 +111,9 @@ def check_results(run: Path, scheme: str, degree: int | None) -> dict:
     if degree:
         p = np.array([r["p"] for r in dec])
         out["p_abs_err_vs_plain_poly_max"] = float(np.abs(p - np.polynomial.polynomial.polyval(m.z_test, m.poly[degree])).max())
-    if scheme == "bgv":
-        q = bgv.Quantizer.build(m.w, m.b, m.clip, m.poly[1])
+    if scheme in ("bgv", "bfv"):
+        lib = bfv if scheme == "bfv" else bgv
+        q = lib.Quantizer.build(m.w, m.b, m.clip, m.poly[1])
         exact = []
         for r, x in zip(dec, m.X_test):
             zq = q.exact_z(q.quantize_x(x))
@@ -169,7 +170,7 @@ def main() -> None:
         a, res = r["audit"], r["results"]
         print(f"{r['run']}: agreement={res['decision_agreement_with_plain']:.3f} "
               f"z_err_max={res['z_abs_err_max']:.1e}"
-              + (f" exact={res['decrypted_equals_exact_integer']}" if scheme == "bgv" else "")
+              + (f" exact={res['decrypted_equals_exact_integer']}" if scheme in ("bgv", "bfv") else "")
               + f" | setup bundle {r['sizes']['setup_bundle_total_bytes'] / 2**20:.1f} MiB, "
               f"request {r['sizes']['request_bytes_per_record'] / 1024:.0f} KiB, "
               f"response {r['sizes']['response_bytes_per_record'] / 1024:.0f} KiB"

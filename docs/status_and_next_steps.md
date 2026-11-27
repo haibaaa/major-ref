@@ -17,7 +17,35 @@ Phase letters follow `CLAUDE.md` §6.
 
 Tests: 22 pass (`uv run pytest`, ~8 s).
 
-## Next step: Phase H (proposed to the user, not yet approved in detail)
+## Scheme extensions
+
+BFV is integrated into the OpenFHE benchmark and client/server flow. Three-run
+benchmarks and linear/degree-1 file exchanges now pass, including exact
+quantized-reference and edge-record checks. BFV selected N=8192 at the
+configured `HEStd_128_classic` level, while CKKS/BGV selected N=16384; compare
+the measured outputs and parameters in `results/benchmark_threads1_bfv_evalsum.json`.
+
+Paillier is implemented as a separate linear-score baseline using `phe`. The
+512-bit smoke agrees on all 60 decisions but is insecure. A three-repetition
+sample of five evenly spaced test records with 3072-bit keys completed with
+5/5 decision agreement; full-set performance remains unmeasured. The baseline
+is linear-only and does not use the OpenFHE exchange protocol.
+
+## Focused project contribution
+
+The current project contribution is a **margin-aware precision selection and
+decision-stability evaluation**. A conservative rounding-error bound is
+computed from the clipping box and quantization scales. The matched 33-bit
+BGV/BFV setting has a bound of 0.001022, below the minimum training margin of
+0.001051; it preserved all training and test decisions and had no flips among
+54 synthetic labeled inputs across three directions. Lower-precision settings
+flipped decisions, with counts that were not monotonic in scale. At the matched
+parameters BFV used N=8192 versus BGV N=16384 and had lower measured stress-path
+latency. Present this as an applied project contribution, not a new
+cryptographic method. To strengthen it, sample more directions and margins,
+then repeat the same rule on another split or dataset if time permits.
+
+## Next step: Phase H (results and presentation)
 
 1. **Plots**, generated only from saved JSON in `results/` (never hand-entered):
    - latency by scheme and operation (encrypt / evaluate / decrypt), 1 vs 4 threads;

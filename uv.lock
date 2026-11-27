@@ -66,6 +66,7 @@ dependencies = [
     { name = "numpy" },
     { name = "openfhe" },
     { name = "pandas" },
+    { name = "phe" },
     { name = "scikit-learn" },
 ]
 
@@ -81,6 +82,7 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.5.5" },
     { name = "openfhe", specifier = "==1.6.1.0.24.4" },
     { name = "pandas", specifier = ">=3.1.1" },
+    { name = "phe", specifier = ">=1.5.0" },
     { name = "scikit-learn", specifier = ">=1.9.1" },
 ]
 
@@ -246,6 +248,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/37/39/46c0cc0c270e084af94f112f958c338c3ef067be38d2cfa34fe7a7c8f110/pandas-3.1.1-cp312-cp312-pyemscripten_2024_0_wasm32.whl", hash = "sha256:6705575b65750e4494b4f9328eed8cb263b4b809984d4eeb8f492a3e804b0c53", size = 8092796, upload-time = "2026-11-04T15:06:07.051Z" },
     { url = "https://files.pythonhosted.org/packages/c8/35/54c22df9e6bdb0fa001da2b8855f997addafd9575f14f25c166a8ef96b6e/pandas-3.1.1-cp312-cp312-win_amd64.whl", hash = "sha256:eef35cb3f07dbc8e10e298b8a55ee4aa04d6511f27d5277f13c3df45d3bbef5c", size = 10751076, upload-time = "2026-11-04T15:06:09.397Z" },
     { url = "https://files.pythonhosted.org/packages/03/e3/76e8a1131d819c6ef7a9f943f7f4148e0112e02a7a25815143c875aa9a10/pandas-3.1.1-cp312-cp312-win_arm64.whl", hash = "sha256:f13731c5f3c610c4584dd4f80df0f1279c657a0b3eff32205cda5d541f5385cf", size = 10133045, upload-time = "2026-11-04T15:06:11.847Z" },
+]
+
+[[package]]
+name = "phe"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/81/47/3efede484a4ca820f0f05c59f3daf60b560f3e397e1eb8df7b37b5657068/phe-1.5.0.tar.gz", hash = "sha256:992fb7091d2427f0d9733946f8f350acdd4d1d012057f2aad364ba79f970339c", size = 51263, upload-time = "2022-04-20T01:45:34.463Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/53/7c/1c514f3e030ff69ee2a184fca3f1514c1d32653ca00869d884b4f981e564/phe-1.5.0-py2.py3-none-any.whl", hash = "sha256:a0d0098e22474b3027cbc0b05e9de2290bc603f1728bf401f498abbdbe795391", size = 53737, upload-time = "2022-04-20T01:45:33.152Z" },
 ]
 
 [[package]]

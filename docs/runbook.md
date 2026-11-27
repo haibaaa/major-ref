@@ -13,7 +13,7 @@ benchmarks.
 | uv | 0.10.2 | project/dependency manager (`CLAUDE.md` §3) |
 | Python | **3.12** (pinned in `.python-version`, `requires-python = ">=3.12,<3.13"`) | the OpenFHE wheel ships `openfhe.cpython-312-x86_64-linux-gnu.so` only, despite its `py3-none-any` tag; on 3.13/3.14 it installs but cannot import |
 | OpenFHE | `openfhe==1.6.1.0.24.4` (exact pin) | the `.24.4` build (Ubuntu 24.04 toolchain) loads on glibc 2.44; `.22.4` builds also exist on PyPI |
-| Other deps | numpy, pandas, scikit-learn, matplotlib, joblib; dev: pytest | see `pyproject.toml` / `uv.lock` |
+| Other deps | numpy, pandas, scikit-learn, matplotlib, joblib, phe (Paillier); dev: pytest | see `pyproject.toml` / `uv.lock` |
 | Build backend | `uv_build` | makes `src/fhe_compare` installable so scripts can `import fhe_compare` |
 
 Setup on a fresh clone:
@@ -59,7 +59,9 @@ Do not use pip, do not create another virtualenv, do not install globally.
 | 11 | `uv run python scripts/benchmark.py --threads 1 --reps 5 --sum rotations` | `results/benchmark_threads1_rotations.json` | ~4 min |
 | 12 | `uv run python scripts/benchmark.py --threads 4 --reps 5` | `results/benchmark_threads4_evalsum.json` | ~2.5 min |
 | 13 | `uv run python scripts/report.py` | `results/benchmark_tables.md` (from every `benchmark_threads*.json`) | < 1 s |
-| 14 | `uv run python scripts/demo_client_server.py --runs ckks:1 bgv:1 ckks:3 bgv:0` | `demo/<run>/…` (ignored), `results/client_server_demo.json` | ~1 min |
+| 14 | `uv run python scripts/demo_client_server.py --runs ckks:1 bgv:1 bfv:1 ckks:3 bgv:0` | `demo/<run>/…` (ignored), `results/client_server_demo.json` | ~1 min |
+| 15 | `uv run python scripts/benchmark_paillier.py --reps 3 --key-bits 3072 --records 5` | `results/benchmark_paillier_3072b_5records.json` | ~1 minute |
+| 16 | `uv run python scripts/margin_stress.py` | `results/margin_stress.json` | ~1–2 minutes |
 
 If you retrain (step 2) you must rerun everything after it: BGV scales/bounds,
 polynomial coefficients and every result depend on the weights.
@@ -75,7 +77,7 @@ background and wait for completion rather than polling.
 --threads N        OMP_NUM_THREADS for the worker processes (default 1)
 --reps R           repetitions; each = new context + keys + all 60 records (default 5)
 --sum METHOD       evalsum (default) | rotations  — slot-summation method
---only NAME ...    subset of: ckks_linear bgv_linear ckks_deg1 bgv_deg1 ckks_deg3 ckks_deg5
+--only NAME ...    subset of: ckks_linear bgv_linear bfv_linear ckks_deg1 bgv_deg1 bfv_deg1 ckks_deg3 ckks_deg5
 --worker NAME      internal: run one config and print JSON (used by the parent)
 ```
 
@@ -97,7 +99,7 @@ uv run python scripts/fhe_client.py decrypt  --run $R
 ```
 
 Driver: `scripts/demo_client_server.py --runs scheme:degree ...` where degree
-0 means linear. Valid: `ckks:0 ckks:1 ckks:3 ckks:5 bgv:0 bgv:1`. The driver
+0 means linear. Valid: `ckks:0 ckks:1 ckks:3 ckks:5 bgv:0 bgv:1 bfv:0 bfv:1`. The driver
 deletes and recreates `demo/<run>/`, chmods `client_private/` to 000 during the
 server step, audits server-visible files and compares with plaintext.
 
@@ -105,7 +107,7 @@ server step, audits server-visible files and compares with plaintext.
 
 - `uv run pytest` — all pass.
 - Encrypted changes: run the relevant script or `benchmark.py --reps 1` and
-  confirm agreement 1.000, BGV `decrypted_equals_exact_integer: true`, CKKS
+  confirm agreement 1.000, BGV/BFV `decrypted_equals_exact_integer: true`, CKKS
   errors ~1e-12 or smaller.
 - Client/server changes: run the demo; confirm 0 secret-key windows found, public
   key not sent, 0 preprocessed feature patterns found.

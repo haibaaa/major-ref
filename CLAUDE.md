@@ -1,17 +1,19 @@
-# CLAUDE.md --- CKKS vs BGV Fully Homomorphic Encryption Project
+# CLAUDE.md --- Encrypted Logistic-Regression Scheme Comparison
 
 ## 1. Project objective
 
-Build an experimental comparison of **CKKS and BGV fully homomorphic
-encryption (FHE)** for privacy-preserving machine-learning inference.
+Build an experimental comparison of **CKKS, BGV and BFV fully homomorphic
+encryption (FHE)** for privacy-preserving machine-learning inference, with
+Paillier as an additive-encryption baseline for the linear score.
 
 The project uses a heart-failure clinical-records dataset and logistic
 regression as the primary model. The intended workflow is:
 
 1.  Train and evaluate a plaintext reference model.
 2.  Implement encrypted inference with CKKS.
-3.  Implement the corresponding encrypted inference with BGV.
-4.  Compare correctness, predictive performance, runtime, memory,
+3.  Implement the corresponding encrypted inference with BGV and BFV.
+4.  Compare Paillier on the linear score, and compare CKKS/BGV/BFV on
+    correctness, predictive performance, runtime, memory,
     ciphertext/key sizes, and parameter requirements.
 5.  Demonstrate a client/server arrangement in which the client retains
     the secret key and the server evaluates encrypted inputs.

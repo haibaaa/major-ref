@@ -30,6 +30,8 @@ keys, ciphertexts and the model). Keep that convention.
 | `model.py` | shared | `Model` dataclass (X_test, y_test, w, b, z_test, clip, fit_range, poly); `load_model()` validates npz vs json and `z_test == X_test @ w + b`; `Model.edge_records()`; `sigmoid` |
 | `ckks.py` | both | `DEPTH = {None: 1, 1: 2, 3: 4, 5: 4}`, `SCALE_BITS = 50`, `FIRST_MOD_BITS = 60`; `make_context`, `keygen`, `encrypt` (CLIENT); `encode_model`, `evaluate` (SERVER); `decrypt` (CLIENT) |
 | `bgv.py` | both | `DEPTH = {None: 1, 1: 2}`, `T_BITS = 31`, `SX_BITS = 8`, `SW_BITS = 10`; `is_prime`, `batching_prime`; `Quantizer` (scales, quantized model, exact bounds, exact reference arithmetic, dequantization); `make_context`, `keygen`, `encrypt`, `encode_model`, `evaluate`, `decrypt` |
+| `bfv.py` | both | BFV counterpart to BGV using the same quantization scales and linear/degree-1 circuit; modulus and wraparound behavior still require empirical validation |
+| `paillier.py` | both | Additive-encryption baseline using `phe`; encrypts each feature separately and evaluates the linear score with plaintext weights; not packed FHE and does not support higher-degree polynomial evaluation |
 | `sizes.py` | measurement | `nbytes(obj)` via `openfhe.Serialize(obj, BINARY)`; `eval_key_sizes(cc, relin_generated)` (reports 0 for key sets not generated) |
 | `protocol.py` | shared | `Protocol` dataclass (public agreed parameters, JSON); `Layout` (demo directory paths); `dump`, `load_context`, `load_ciphertext`, `load_secret_key`, `load_public_key`, `dump_eval_keys`, `load_eval_keys` |
 | `client.py` | CLIENT | `preprocess(raw, proto)`; `setup`, `encrypt`, `decrypt` (file-based) |
@@ -69,6 +71,8 @@ vals = bgv.decrypt(cc, keys.secretKey, outs)              # centered residues (i
 | `bgv_modulus_probe.py` | E | no | largest usable plaintext modulus, per scaling technique |
 | `bgv_linear.py` | E | imports `bgv_modulus_probe.batching_prime` | first BGV linear + degree-1 inference |
 | `benchmark.py` | F | yes | controlled benchmark (subprocess per config) |
+| `benchmark_paillier.py` | extension | yes | Paillier additive linear-score benchmark; record count is configurable |
+| `margin_stress.py` | extension | yes | controlled synthetic logits near zero; quantization error bounds and decision flips |
 | `report.py` | F/H | no | Markdown tables from benchmark JSON |
 | `fhe_server.py`, `fhe_client.py` | G | yes | role CLIs |
 | `demo_client_server.py` | G | yes | runs roles as separate processes, audits, compares |

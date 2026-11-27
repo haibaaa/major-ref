@@ -18,7 +18,7 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("step", choices=["init", "evaluate"])
     ap.add_argument("--run", type=Path, required=True)
-    ap.add_argument("--scheme", choices=["ckks", "bgv"])
+    ap.add_argument("--scheme", choices=["ckks", "bgv", "bfv"])
     ap.add_argument("--degree", type=int)
     ap.add_argument("--sum", default="evalsum", choices=["evalsum", "rotations"])
     args = ap.parse_args()
